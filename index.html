@@ -1,0 +1,1220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="An interactive Hindu pañcāṅga: tithi, nakṣatra, yoga, karaṇa and vāra drawn as a turning sky-wheel, a sunrise-to-sunrise ribbon and a weave of the lunar month.">
+<style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Kālacakra Pañcāṅga</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Noto+Serif+Devanagari:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a palm-leaf folio header, then the turning wheel of the sky beside the five limbs,
+   then the sunrise-to-sunrise ribbon of the day, then the weave of tithis against civil dates. */
+:root {
+  --leaf: #EDE0BD;        /* tāḍapatra, the palm-leaf ground */
+  --leaf-deep: #E2CF9C;
+  --leaf-lit: #F8F0D8;
+  --ink: #2A1A10;         /* lamp-black kajal ink */
+  --ink-soft: #6A5240;
+  --ink-faint: #9C8466;
+  --sindoor: #AE2F1B;     /* vermilion of Jain manuscript margins */
+  --haldi: #D49618;       /* turmeric gold */
+  --lapis: #1E3570;       /* ultramarine */
+  --lapis-deep: #1A2550;
+  --malachite: #2C6A55;
+  --geru: #97471F;        /* red ochre */
+  --rule: rgba(110, 70, 30, .28);
+
+  --f-display: "Noto Serif Devanagari", "Kohinoor Devanagari", Georgia, serif;
+  --f-deva: "Noto Serif Devanagari", "Kohinoor Devanagari", serif;
+  --f-body: "Alegreya", "Iowan Old Style", Georgia, serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body {
+  background-color: var(--leaf);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(120, 84, 30, .045) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(0deg, rgba(255, 250, 230, .25) 0 2px, transparent 2px 23px),
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 248, 225, .7), transparent 70%);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+.wrap {
+  max-width: 1340px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 22px 56px;
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 26px;
+}
+.deva { font-family: var(--f-deva); }
+.sc { font-variant: small-caps; letter-spacing: .06em; }
+.num { font-variant-numeric: tabular-nums; }
+button, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--lapis); outline-offset: 2px; }
+
+/* ---------- folio header ---------- */
+.folio {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255,250,232,.55), rgba(255,250,232,0) 40%, rgba(120,80,20,.06)),
+    repeating-linear-gradient(0deg, rgba(120, 84, 30, .06) 0 1px, transparent 1px 4px),
+    var(--leaf-deep);
+  border-radius: 48px / 60px;
+  padding: 22px 76px 20px;
+  box-shadow: inset 0 0 0 1.5px rgba(110,70,30,.35), 0 1px 0 rgba(255,255,255,.6), 0 14px 30px -22px rgba(70,40,10,.55);
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px 34px; align-items: center;
+}
+.folio::before, .folio::after {
+  content: ""; position: absolute; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #5b3b1c, #2a1708 70%);
+  box-shadow: 0 0 0 3px rgba(110,70,30,.18), inset 0 1px 2px rgba(0,0,0,.6);
+}
+.folio::before { left: 30px; } .folio::after { right: 30px; }
+.title { display: grid; gap: 0; }
+.title h1 { margin: 0; font-family: var(--f-display); font-weight: 600; font-size: 50px; line-height: 1.15; color: var(--sindoor); }
+.title .sub { font-style: italic; color: var(--ink-soft); font-size: 15px; margin-top: 4px; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 0; min-width: 0; }
+.facts div { display: grid; }
+.facts dt { font-size: 11.5px; color: var(--ink-faint); font-variant: small-caps; letter-spacing: .08em; }
+.facts dd { margin: 0; font-size: 15.5px; }
+.facts dd .deva { font-size: 15px; color: var(--geru); margin-right: 4px; }
+.controls { display: grid; gap: 8px; justify-items: end; }
+.nav { display: flex; gap: 6px; align-items: center; }
+.seal {
+  border: 1.5px solid var(--sindoor); color: var(--sindoor); background: rgba(255, 248, 228, .6);
+  border-radius: 999px; padding: 4px 13px; cursor: pointer; font-size: 14px; line-height: 1.3;
+  transition: background .15s, color .15s;
+}
+.seal:hover { background: var(--sindoor); color: var(--leaf-lit); }
+.seal.round { width: 32px; height: 32px; padding: 0; display: grid; place-items: center; font-size: 17px; }
+.seal.live { display: inline-flex; align-items: center; gap: 7px; }
+.seal.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .25; transform: scale(.7); } }
+.seal[aria-pressed="true"] { background: var(--sindoor); color: var(--leaf-lit); }
+.city { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--ink-soft); }
+.city select {
+  background: rgba(255, 248, 228, .7); border: 1px solid var(--rule); border-radius: 8px; padding: 3px 8px; font-size: 14px; color: var(--ink);
+}
+.lede { margin: -8px 4px 0; max-width: 78ch; color: var(--ink-soft); font-size: 15.5px; text-wrap: pretty; }
+.lede b { color: var(--ink); font-weight: 700; }
+
+/* ---------- main stage ---------- */
+.stage { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 26px; align-items: start; }
+.frame {
+  position: relative; background: rgba(250, 243, 222, .55);
+  border: 2px solid var(--sindoor); border-radius: 4px; padding: 14px;
+  box-shadow: inset 0 0 0 4px rgba(250, 243, 222, .9), inset 0 0 0 5px rgba(174, 47, 27, .55);
+}
+.frame > h2, .sec-h {
+  margin: 0 0 6px; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  font-family: var(--f-display); font-weight: 600; font-size: 24px; color: var(--sindoor); line-height: 1.1; text-wrap: balance;
+}
+.frame > h2 small, .sec-h small { font-family: var(--f-body); font-size: 14px; font-style: italic; color: var(--ink-soft); }
+.wheel-box { display: grid; gap: 10px; }
+#wheel { width: 100%; height: auto; display: block; touch-action: none; }
+.key { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 6px 18px; margin: 0; padding: 4px 6px 2px; list-style: none; font-size: 13.5px; color: var(--ink-soft); }
+.key li { display: grid; grid-template-columns: 22px 1fr; gap: 6px; align-items: start; }
+.key i { font-style: normal; font-family: var(--f-display); color: var(--sindoor); font-size: 15px; line-height: 1.35; }
+.key b { color: var(--ink); font-weight: 700; }
+
+/* svg type */
+.w-nak { font-family: var(--f-deva); font-size: 14.5px; font-weight: 500; fill: var(--ink); }
+.w-num { font-family: var(--f-body); font-size: 10px; fill: var(--ink-faint); }
+.w-ras { font-family: var(--f-deva); font-size: 16px; font-weight: 600; fill: var(--lapis); }
+.w-yoga { font-family: var(--f-deva); font-size: 10.5px; fill: var(--ink-soft); }
+.w-tithi { font-family: var(--f-deva); font-size: 17px; font-weight: 500; }
+.w-cap { font-family: var(--f-body); font-size: 12px; letter-spacing: .08em; fill: var(--ink-soft); font-variant: small-caps; }
+.seg-nak { fill: var(--leaf-lit); stroke: var(--rule); stroke-width: 1; transition: fill .25s; }
+.seg-nak.alt { fill: #F1E5C3; }
+.seg-nak.on { fill: var(--sindoor); }
+.seg-nak.sun { fill: #F2D58A; }
+.on-t { fill: var(--leaf-lit) !important; }
+.seg-ras { fill: #E9DDB8; stroke: var(--rule); stroke-width: 1; }
+.seg-ras.on { fill: var(--lapis); }
+.seg-yoga { fill: #F4EAD0; stroke: var(--rule); stroke-width: .8; }
+.seg-yoga.bad { fill: #EAD3BF; }
+.seg-yoga.on { fill: var(--malachite); }
+.seg-kar { stroke: rgba(42,26,16,.25); stroke-width: .6; }
+.seg-tithi { stroke: rgba(42,26,16,.35); stroke-width: 1; }
+.seg-tithi.on { stroke: var(--sindoor); stroke-width: 3; }
+
+/* ---------- limbs ---------- */
+.side { display: grid; gap: 22px; min-width: 0; }
+.limbs { display: grid; gap: 12px; }
+.leaf {
+  position: relative; display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 4px 16px;
+  padding: 14px 18px 14px 30px; border-radius: 26px / 36px;
+  background:
+    repeating-linear-gradient(0deg, rgba(120, 84, 30, .055) 0 1px, transparent 1px 4px),
+    linear-gradient(180deg, #F3E7C6, #E8D7A8);
+  box-shadow: inset 0 0 0 1px rgba(110,70,30,.3), 0 8px 18px -16px rgba(70,40,10,.6);
+}
+.leaf::before { content: ""; position: absolute; left: 12px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: #3a2410; box-shadow: inset 0 1px 1px rgba(0,0,0,.6); }
+.leaf .lab { display: grid; align-content: start; gap: 0; border-right: 1px solid var(--rule); padding-right: 10px; }
+.leaf .lab .deva { font-size: 22px; font-weight: 600; color: var(--sindoor); line-height: 1.2; }
+.leaf .lab span:last-child { font-size: 12.5px; color: var(--ink-soft); font-style: italic; line-height: 1.3; }
+.leaf .body { min-width: 0; display: grid; gap: 5px; }
+.leaf .val { display: flex; align-items: baseline; gap: 4px 12px; flex-wrap: wrap; }
+.leaf .val .big { font-family: var(--f-display); font-weight: 600; font-size: 27px; line-height: 1.2; color: var(--ink); }
+.leaf .val .iast { font-size: 17px; font-style: italic; }
+.leaf .val .gloss { font-size: 13.5px; color: var(--ink-soft); }
+.bar { position: relative; height: 7px; border-radius: 4px; background: rgba(110,70,30,.14); overflow: hidden; }
+.bar i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, var(--haldi), var(--sindoor)); border-radius: 4px; }
+.span { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; color: var(--ink-soft); flex-wrap: wrap; }
+.formula { font-size: 13.5px; color: var(--lapis); font-variant-numeric: tabular-nums; }
+.formula b { font-weight: 700; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { font-size: 12px; border: 1px solid var(--rule); border-radius: 999px; padding: 0 8px; color: var(--ink-soft); background: rgba(255,250,235,.55); white-space: nowrap; }
+.chip.warn { border-color: rgba(174,47,27,.5); color: var(--sindoor); }
+.chip.good { border-color: rgba(44,106,85,.5); color: var(--malachite); }
+
+/* ---------- viśeṣa notes ---------- */
+.notes { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.notes li { display: grid; grid-template-columns: 12px 1fr; gap: 10px; font-size: 14.5px; align-items: baseline; text-wrap: pretty; }
+.notes li::before { content: ""; width: 9px; height: 9px; transform: rotate(45deg) translateY(-1px); background: var(--haldi); }
+.notes li.warn::before { background: var(--sindoor); }
+.notes li.fest::before { background: var(--malachite); border-radius: 50%; transform: none; }
+.notes li.adhika::before { background: var(--lapis); }
+.notes b { font-weight: 700; }
+.notes .deva { color: var(--geru); }
+
+/* ---------- ribbon ---------- */
+.scroll { overflow-x: auto; overscroll-behavior-x: contain; }
+#ribbon { display: block; width: 100%; min-width: 980px; height: auto; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; }
+.r-lab { font-family: var(--f-deva); font-size: 14px; font-weight: 600; fill: var(--sindoor); }
+.r-sub { font-family: var(--f-body); font-size: 10.5px; fill: var(--ink-soft); font-style: italic; }
+.r-txt { font-family: var(--f-deva); font-size: 13px; fill: var(--ink); pointer-events: none; }
+.r-txt.l { fill: var(--leaf-lit); }
+.r-time { font-family: var(--f-body); font-size: 10.5px; fill: var(--ink-soft); font-variant-numeric: tabular-nums; pointer-events: none; }
+.r-axis { font-family: var(--f-body); font-size: 11px; fill: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.r-gh { font-family: var(--f-deva); font-size: 11px; fill: var(--geru); }
+.ribbon-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px; font-size: 13px; color: var(--ink-soft); margin-top: 8px; }
+.ribbon-foot .sw { display: inline-block; width: 11px; height: 11px; border-radius: 2px; vertical-align: -1px; margin-right: 5px; }
+
+/* ---------- weave ---------- */
+#weave { display: grid; gap: 10px; min-width: 980px; }
+.wrow { display: grid; grid-template-columns: 96px repeat(15, minmax(0, 1fr)); gap: 4px; }
+.wrow .rl { display: grid; align-content: center; padding-right: 6px; }
+.wrow .rl .deva { font-size: 16px; font-weight: 600; color: var(--sindoor); line-height: 1.2; }
+.wrow .rl span:last-child { font-size: 11.5px; font-style: italic; color: var(--ink-soft); }
+.cell {
+  position: relative; display: grid; justify-items: center; align-content: start; gap: 2px;
+  padding: 7px 3px 8px; min-height: 128px; border-radius: 6px;
+  background: rgba(250, 243, 222, .7); border: 1px solid var(--rule);
+}
+.cell .tn { font-family: var(--f-deva); font-size: 17px; line-height: 1; color: var(--ink); }
+.cell .tl { font-size: 10.5px; font-style: italic; color: var(--ink-soft); line-height: 1.1; text-align: center; }
+.cell .dates { display: grid; gap: 3px; width: 100%; justify-items: center; margin-top: 3px; }
+.cell .dt { font-size: 12px; border-radius: 999px; padding: 1px 7px; border: 1px solid transparent; cursor: pointer; background: none; line-height: 1.35; font-variant-numeric: tabular-nums; }
+.cell .dt:hover { border-color: var(--sindoor); color: var(--sindoor); }
+.cell .dt.cur { background: var(--sindoor); color: var(--leaf-lit); }
+.cell .fest { font-size: 10.5px; color: var(--malachite); text-align: center; line-height: 1.15; font-weight: 700; }
+.cell .vr { font-size: 10px; color: var(--ink-faint); text-align: center; line-height: 1.15; }
+.cell.ksaya { background: repeating-linear-gradient(135deg, rgba(174,47,27,.07) 0 6px, transparent 6px 12px); border: 1.5px dashed rgba(174,47,27,.55); }
+.cell.ksaya .mark, .cell.vrddhi .mark { font-size: 10px; font-variant: small-caps; letter-spacing: .08em; color: var(--sindoor); font-weight: 700; }
+.cell.vrddhi { border: 1.5px solid var(--haldi); background: rgba(240, 210, 130, .25); }
+.cell.vrddhi .mark { color: var(--geru); }
+.cell.here { box-shadow: 0 0 0 2px var(--sindoor); }
+.weave-foot { font-size: 13.5px; color: var(--ink-soft); margin-top: 10px; max-width: 95ch; text-wrap: pretty; }
+
+/* ---------- tooltip ---------- */
+#tip {
+  position: fixed; z-index: 20; pointer-events: none; max-width: 260px;
+  background: var(--ink); color: var(--leaf-lit); border-radius: 8px; padding: 7px 10px; font-size: 13px; line-height: 1.35;
+  box-shadow: 0 10px 24px -10px rgba(0,0,0,.5); opacity: 0; transition: opacity .12s;
+}
+#tip.show { opacity: 1; }
+#tip .deva { color: #F2C66A; font-size: 15px; }
+#tip em { color: #D9C7A0; }
+
+footer { font-size: 13px; color: var(--ink-faint); text-align: center; max-width: 90ch; margin: 0 auto; text-wrap: pretty; }
+
+@media (max-width: 1060px) {
+  .stage { grid-template-columns: minmax(0, 1fr); }
+  .folio { grid-template-columns: minmax(0, 1fr); padding: 20px 46px; border-radius: 34px; }
+  .folio::before { left: 17px; } .folio::after { right: 17px; }
+  .controls { justify-items: start; }
+}
+@media (max-width: 560px) {
+  .title h1 { font-size: 42px; }
+  .leaf { grid-template-columns: minmax(0, 1fr); padding-left: 28px; }
+  .leaf .lab { border-right: 0; border-bottom: 1px solid var(--rule); padding: 0 0 4px; grid-auto-flow: column; justify-content: start; align-items: baseline; gap: 10px; }
+  .frame { padding: 10px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="folio">
+    <div class="title">
+      <h1 class="deva">पञ्चाङ्ग</h1>
+      <span class="sub">Pañcāṅga · the five limbs of time</span>
+    </div>
+    <dl class="facts" id="facts"></dl>
+    <div class="controls">
+      <div class="nav">
+        <button class="seal round" id="prev" aria-label="Previous day" title="Previous day">‹</button>
+        <button class="seal" id="today" title="Follow the present moment">Now</button>
+        <button class="seal" id="play" aria-pressed="false" title="Let time run: one day every ten seconds">▶ Run time</button>
+        <button class="seal round" id="next" aria-label="Next day" title="Next day">›</button>
+      </div>
+      <label class="city" for="citySel">Place
+        <select id="citySel"></select>
+      </label>
+    </div>
+  </header>
+
+  <p class="lede">A pañcāṅga names every moment by five measures of the Sun and Moon. The Hindu day begins at <b>sunrise</b>, not midnight, and takes its name from whichever limbs are present at that sunrise, even when they change an hour later. <b>Drag across the day ribbon</b> to move through the day and watch the sky-wheel turn.</p>
+
+  <section class="stage">
+    <div class="frame wheel-box">
+      <h2><span class="deva">कालचक्र</span> <small>Kālacakra · the wheel of the sky, seen from above the north pole</small></h2>
+      <svg id="wheel" viewBox="0 0 1000 1000" role="img" aria-label="Sky wheel showing the Sun, Moon, nakshatras, rashis, yogas and tithis"></svg>
+      <ol class="key">
+        <li><i>१</i><span><b>Nakṣatra</b> ring: 27 lunar mansions of 13°20′, each split into 4 pādas. Red marks the Moon's mansion.</span></li>
+        <li><i>२</i><span><b>Rāśi</b> ring: the 12 sidereal signs. Blue marks the Moon's sign.</span></li>
+        <li><i>३</i><span><b>Yoga</b> ring: the Sun's and Moon's longitudes added together, cut into 27. The green diamond is that sum.</span></li>
+        <li><i>४</i><span><b>Tithi</b> ring turns with the Sun. Each cell is 12° of the Moon's lead over the Sun, shaded by how lit the Moon is.</span></li>
+        <li><i>५</i><span><b>Karaṇa</b> ticks are half-tithis. Red ticks are Viṣṭi (Bhadrā), avoided for beginnings.</span></li>
+        <li><i>☾</i><span>The centre shows the Moon as it looks now. The gold wedge from the centre spans the Moon's lead over the Sun.</span></li>
+      </ol>
+    </div>
+
+    <div class="side">
+      <div class="limbs" id="limbs"></div>
+      <section class="frame">
+        <h2 class="sec-h"><span class="deva">विशेष</span> <small>Viśeṣa · what sets this day apart</small></h2>
+        <ul class="notes" id="notes"></ul>
+      </section>
+    </div>
+  </section>
+
+  <section class="frame">
+    <h2 class="sec-h"><span class="deva">अहोरात्र</span> <small id="ribbonCap">Ahorātra · one day, sunrise to sunrise</small></h2>
+    <div class="scroll"><svg id="ribbon" viewBox="0 0 1200 336" aria-label="Day ribbon from sunrise to next sunrise"></svg></div>
+    <div class="ribbon-foot">
+      <span><span class="sw" style="background:var(--sindoor)"></span>Rāhu kāla <span class="sw" style="background:var(--lapis);margin-left:12px"></span>Yamagaṇḍa <span class="sw" style="background:var(--malachite);margin-left:12px"></span>Gulika <span class="sw" style="background:var(--haldi);margin-left:12px"></span>Abhijit &amp; Brahma muhūrta</span>
+      <span>Top scale: Indian Standard Time. Bottom scale: <b>ghaṭī</b> since sunrise (1 ghaṭī = 24 min, 60 to a day).</span>
+    </div>
+  </section>
+
+  <section class="frame">
+    <h2 class="sec-h"><span class="deva" id="masaDev">मास</span> <small id="masaCap">Māsa · the lunar month</small></h2>
+    <div class="scroll"><div id="weave"></div></div>
+    <p class="weave-foot">Each cell is one tithi; the dates below it are the civil days whose sunrise fell inside it. Tithis run 19 to 26 hours, so they drift against the solar day. A tithi that starts after one sunrise and ends before the next never names a day (<b style="color:var(--sindoor)">kṣaya</b>, dashed). One that spans two sunrises names two days (<b style="color:var(--geru)">vṛddhi</b>, gold). Festivals follow each one's own rule: some take the tithi at sunrise, others the tithi at dusk (pradoṣa) or at midnight (niśītha). Click a date to go there.</p>
+  </section>
+
+  <footer>Calculated in your browser from truncated lunar and solar theories, with the Lahiri (Citrāpakṣa) ayanāṁśa and Indian Standard Time. Transition times are good to a few minutes. Local traditions differ on festival dates and samvatsara reckoning, so check with your temple's calendar before a ceremony.</footer>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+/* ---------- Jyotiṣa engine: low-precision sun & moon, Lahiri ayanāṁśa ---------- */
+const D2R = Math.PI / 180, DAY = 864e5, IST = 330 * 60000;
+const norm = a => ((a % 360) + 360) % 360;
+const sin = d => Math.sin(d * D2R), cos = d => Math.cos(d * D2R);
+const jdOf = ms => ms / DAY + 2440587.5;
+const cent = ms => (jdOf(ms + 69000) - 2451545) / 36525; // TT ≈ UT + 69s
+
+function sunTrop(ms) {
+  const T = cent(ms);
+  const L0 = 280.46646 + 36000.76983 * T + 0.0003032 * T * T;
+  const M = 357.52911 + 35999.05029 * T - 0.0001537 * T * T;
+  const C = (1.914602 - 0.004817 * T) * sin(M) + (0.019993 - 0.000101 * T) * sin(2 * M) + 0.000289 * sin(3 * M);
+  const om = 125.04 - 1934.136 * T;
+  return norm(L0 + C - 0.00569 - 0.00478 * sin(om));
+}
+function moonTrop(ms) {
+  const T = cent(ms);
+  const Lp = 218.3164477 + 481267.88123421 * T - 0.0015786 * T * T;
+  const D = 297.8501921 + 445267.1114034 * T - 0.0018819 * T * T;
+  const M = 357.5291092 + 35999.0502909 * T;
+  const Mp = 134.9633964 + 477198.8675055 * T + 0.0087414 * T * T;
+  const F = 93.272095 + 483202.0175233 * T - 0.0036539 * T * T;
+  const E = 1 - 0.002516 * T;
+  const terms = [
+    [0, 0, 1, 0, 6.288774], [2, 0, -1, 0, 1.274027], [2, 0, 0, 0, 0.658314], [0, 0, 2, 0, 0.213618],
+    [0, 1, 0, 0, -0.185116], [0, 0, 0, 2, -0.114332], [2, 0, -2, 0, 0.058793], [2, -1, -1, 0, 0.057066],
+    [2, 0, 1, 0, 0.053322], [2, -1, 0, 0, 0.045758], [0, 1, -1, 0, -0.040923], [1, 0, 0, 0, -0.03472],
+    [0, 1, 1, 0, -0.030383], [2, 0, 0, -2, 0.015327], [0, 0, 1, 2, -0.012528], [0, 0, 1, -2, 0.01098],
+    [4, 0, -1, 0, 0.010675], [0, 0, 3, 0, 0.010034], [4, 0, -2, 0, 0.008548], [2, 1, -1, 0, -0.007888],
+    [2, 1, 0, 0, -0.006766], [1, 0, -1, 0, -0.005163], [1, 1, 0, 0, 0.004987], [2, -1, 1, 0, 0.004036],
+    [2, 0, 2, 0, 0.003994], [4, 0, 0, 0, 0.003861], [2, 0, -3, 0, 0.003665], [0, 1, -2, 0, -0.002689],
+    [2, 0, -1, 2, -0.002602], [2, -1, -2, 0, 0.00239], [1, 0, 1, 0, -0.002348], [2, -2, 0, 0, 0.002236],
+    [0, 1, 2, 0, -0.00212], [0, 2, 0, 0, -0.002069], [2, -2, -1, 0, 0.002048], [2, 0, 1, -2, -0.001773],
+    [2, 0, 0, 2, -0.001595], [4, -1, -1, 0, 0.001215], [0, 0, 2, 2, -0.00111], [3, 0, -1, 0, -0.000892],
+    [2, 1, 1, 0, -0.000811], [4, -1, -2, 0, 0.000761], [0, 2, -1, 0, 0.000717], [2, 2, -1, 0, 0.000704],
+  ];
+  let s = 0;
+  for (const [d, m, mp, f, c] of terms) {
+    const e = Math.abs(m) === 1 ? E : Math.abs(m) === 2 ? E * E : 1;
+    s += c * e * sin(d * D + m * M + mp * Mp + f * F);
+  }
+  const A1 = 119.75 + 131.849 * T, A2 = 53.09 + 479264.29 * T;
+  s += 0.003958 * sin(A1) + 0.001962 * sin(Lp - F) + 0.000318 * sin(A2);
+  const om = 125.04 - 1934.136 * T;
+  return norm(Lp + s - 0.00478 * sin(om));
+}
+const ayanamsa = ms => 23.85306 + 1.39722 * cent(ms) + 0.00018 * cent(ms) ** 2; // Lahiri (Citrāpakṣa)
+const sunSid = ms => norm(sunTrop(ms) - ayanamsa(ms));
+const moonSid = ms => norm(moonTrop(ms) - ayanamsa(ms));
+const elong = ms => norm(moonTrop(ms) - sunTrop(ms));
+
+/* sunrise / sunset for a civil date (IST) at lat/lon — returns UTC ms */
+function sunEvents(y, m, d, lat, lon) {
+  const jd0 = Date.UTC(y, m, d) / DAY + 2440587.5;
+  const n = Math.round(jd0 + 0.5 - 2451545);
+  const Js = n - lon / 360;
+  const M = norm(357.5291 + 0.98560028 * Js);
+  const C = 1.9148 * sin(M) + 0.02 * sin(2 * M) + 0.0003 * sin(3 * M);
+  const lam = norm(M + C + 180 + 102.9372);
+  const Jt = 2451545 + Js + 0.0053 * sin(M) - 0.0069 * sin(2 * lam);
+  const sd = sin(lam) * sin(23.44), cd = Math.cos(Math.asin(sd));
+  const w0 = Math.acos((sin(-0.833) - sin(lat) * sd) / (cos(lat) * cd)) / D2R;
+  const toMs = J => (J - 2440587.5) * DAY;
+  return { rise: toMs(Jt - w0 / 360), set: toMs(Jt + w0 / 360), noon: toMs(Jt) };
+}
+
+/* the five limbs as continuous quantities */
+const limbs = {
+  tithi: ms => elong(ms) / 12,                          // 0..30
+  nakshatra: ms => moonSid(ms) / (360 / 27),            // 0..27
+  yoga: ms => norm(sunSid(ms) + moonSid(ms)) / (360 / 27),
+  karana: ms => elong(ms) / 6,                          // 0..60
+};
+const idx = (k, ms) => Math.floor(limbs[k](ms));
+
+/* find where a limb's integer index changes, with bisection to ~20 s */
+function refine(k, a, b) {
+  const ia = idx(k, a);
+  while (b - a > 20000) { const m = (a + b) / 2; if (idx(k, m) === ia) a = m; else b = m; }
+  return b;
+}
+function spans(k, start, end) {
+  const step = k === 'karana' ? 20 * 60000 : 40 * 60000;
+  const out = []; let cur = idx(k, start), from = start, t = start;
+  while (t < end) {
+    const nt = Math.min(t + step, end), ni = idx(k, nt);
+    if (ni !== cur) { const x = refine(k, t, nt); out.push({ i: cur, from, to: x }); cur = idx(k, x); from = x; }
+    t = nt;
+  }
+  out.push({ i: cur, from, to: end });
+  return out;
+}
+/* when did the limb active at `ms` begin and when does it end (unclipped) */
+function limbWindow(k, ms) {
+  const span = k === 'karana' ? 6 : k === 'tithi' ? 12 : 360 / 27;
+  const i = idx(k, ms);
+  let a = ms, b = ms;
+  while (idx(k, a) === i) a -= 3 * 3600e3;
+  while (idx(k, b) === i) b += 3 * 3600e3;
+  // bisect both edges
+  let lo = a, hi = ms; while (hi - lo > 20000) { const m = (lo + hi) / 2; if (idx(k, m) === i) hi = m; else lo = m; }
+  const start = hi;
+  lo = ms; hi = b; while (hi - lo > 20000) { const m = (lo + hi) / 2; if (idx(k, m) === i) lo = m; else hi = m; }
+  return { i, start, end: hi, span };
+}
+
+/* new moons around ms (Newton on elongation) */
+function newMoonNear(ms, dir) {
+  let t = ms;
+  const e = elong(ms);
+  t += (dir < 0 ? -e : 360 - e) / 12.19 * DAY;
+  for (let k = 0; k < 6; k++) { const s = ((elong(t) + 180) % 360) - 180; t -= s / 12.19 * DAY; }
+  return t;
+}
+function masaInfo(ms) {
+  const p = newMoonNear(ms, -1), n = newMoonNear(ms + 3600e3, 1);
+  const rp = Math.floor(sunSid(p) / 30), rn = Math.floor(sunSid(n) / 30);
+  return { prevNM: p, nextNM: n, amanta: (rp + 1) % 12, adhika: rp === rn };
+}
+
+/* civil helpers in IST */
+const istParts = ms => { const d = new Date(ms + IST); return { y: d.getUTCFullYear(), m: d.getUTCMonth(), d: d.getUTCDate(), wd: d.getUTCDay(), h: d.getUTCHours(), mi: d.getUTCMinutes() }; };
+const fmt = ms => { const p = istParts(ms); return String(p.h).padStart(2, '0') + ':' + String(p.mi).padStart(2, '0'); };
+
+
+</script>
+<script>
+/* ---------- names ---------- */
+const NAK = [
+  ['अश्विनी', 'Aśvinī', 'Aśvins', 'Ketu', 'Deva'], ['भरणी', 'Bharaṇī', 'Yama', 'Śukra', 'Manuṣya'],
+  ['कृत्तिका', 'Kṛttikā', 'Agni', 'Sūrya', 'Rākṣasa'], ['रोहिणी', 'Rohiṇī', 'Prajāpati', 'Candra', 'Manuṣya'],
+  ['मृगशिरा', 'Mṛgaśirā', 'Soma', 'Maṅgala', 'Deva'], ['आर्द्रा', 'Ārdrā', 'Rudra', 'Rāhu', 'Manuṣya'],
+  ['पुनर्वसु', 'Punarvasu', 'Aditi', 'Guru', 'Deva'], ['पुष्य', 'Puṣya', 'Bṛhaspati', 'Śani', 'Deva'],
+  ['आश्लेषा', 'Āśleṣā', 'Sarpas', 'Budha', 'Rākṣasa'], ['मघा', 'Maghā', 'Pitṛs', 'Ketu', 'Rākṣasa'],
+  ['पूर्वफाल्गुनी', 'Pūrva Phalgunī', 'Bhaga', 'Śukra', 'Manuṣya'], ['उत्तरफाल्गुनी', 'Uttara Phalgunī', 'Aryaman', 'Sūrya', 'Manuṣya'],
+  ['हस्त', 'Hasta', 'Savitṛ', 'Candra', 'Deva'], ['चित्रा', 'Citrā', 'Tvaṣṭṛ', 'Maṅgala', 'Rākṣasa'],
+  ['स्वाती', 'Svātī', 'Vāyu', 'Rāhu', 'Deva'], ['विशाखा', 'Viśākhā', 'Indrāgni', 'Guru', 'Rākṣasa'],
+  ['अनुराधा', 'Anurādhā', 'Mitra', 'Śani', 'Deva'], ['ज्येष्ठा', 'Jyeṣṭhā', 'Indra', 'Budha', 'Rākṣasa'],
+  ['मूल', 'Mūla', 'Nirṛti', 'Ketu', 'Rākṣasa'], ['पूर्वाषाढा', 'Pūrvāṣāḍhā', 'Āpas', 'Śukra', 'Manuṣya'],
+  ['उत्तराषाढा', 'Uttarāṣāḍhā', 'Viśvedevas', 'Sūrya', 'Manuṣya'], ['श्रवण', 'Śravaṇa', 'Viṣṇu', 'Candra', 'Deva'],
+  ['धनिष्ठा', 'Dhaniṣṭhā', 'Vasus', 'Maṅgala', 'Rākṣasa'], ['शतभिषा', 'Śatabhiṣā', 'Varuṇa', 'Rāhu', 'Rākṣasa'],
+  ['पूर्वभाद्रपदा', 'Pūrva Bhādrapadā', 'Aja Ekapāda', 'Guru', 'Manuṣya'], ['उत्तरभाद्रपदा', 'Uttara Bhādrapadā', 'Ahirbudhnya', 'Śani', 'Manuṣya'],
+  ['रेवती', 'Revatī', 'Pūṣan', 'Budha', 'Deva'],
+];
+const TITHI = [
+  ['प्रतिपदा', 'Pratipadā', 'Agni'], ['द्वितीया', 'Dvitīyā', 'Brahmā'], ['तृतीया', 'Tṛtīyā', 'Gaurī'],
+  ['चतुर्थी', 'Caturthī', 'Gaṇeśa'], ['पञ्चमी', 'Pañcamī', 'Nāgas'], ['षष्ठी', 'Ṣaṣṭhī', 'Kārttikeya'],
+  ['सप्तमी', 'Saptamī', 'Sūrya'], ['अष्टमी', 'Aṣṭamī', 'Śiva'], ['नवमी', 'Navamī', 'Durgā'],
+  ['दशमी', 'Daśamī', 'Yama'], ['एकादशी', 'Ekādaśī', 'Viśvedevas'], ['द्वादशी', 'Dvādaśī', 'Viṣṇu'],
+  ['त्रयोदशी', 'Trayodaśī', 'Kāmadeva'], ['चतुर्दशी', 'Caturdaśī', 'Śiva'], ['पूर्णिमा', 'Pūrṇimā', 'Candra'],
+];
+const AMA = ['अमावस्या', 'Amāvasyā', 'Pitṛs'];
+const TCLASS = ['Nandā · joyful', 'Bhadrā · auspicious', 'Jayā · victorious', 'Riktā · empty', 'Pūrṇā · full'];
+const YOGA = [
+  ['विष्कम्भ', 'Viṣkambha', 0], ['प्रीति', 'Prīti', 1], ['आयुष्मान्', 'Āyuṣmān', 1], ['सौभाग्य', 'Saubhāgya', 1],
+  ['शोभन', 'Śobhana', 1], ['अतिगण्ड', 'Atigaṇḍa', 0], ['सुकर्मा', 'Sukarmā', 1], ['धृति', 'Dhṛti', 1],
+  ['शूल', 'Śūla', 0], ['गण्ड', 'Gaṇḍa', 0], ['वृद्धि', 'Vṛddhi', 1], ['ध्रुव', 'Dhruva', 1],
+  ['व्याघात', 'Vyāghāta', 0], ['हर्षण', 'Harṣaṇa', 1], ['वज्र', 'Vajra', 0], ['सिद्धि', 'Siddhi', 1],
+  ['व्यतीपात', 'Vyatīpāta', 0], ['वरीयान्', 'Varīyān', 1], ['परिघ', 'Parigha', 0], ['शिव', 'Śiva', 1],
+  ['सिद्ध', 'Siddha', 1], ['साध्य', 'Sādhya', 1], ['शुभ', 'Śubha', 1], ['शुक्ल', 'Śukla', 1],
+  ['ब्रह्म', 'Brahma', 1], ['ऐन्द्र', 'Aindra', 1], ['वैधृति', 'Vaidhṛti', 0],
+];
+const KMOV = [['बव', 'Bava'], ['बालव', 'Bālava'], ['कौलव', 'Kaulava'], ['तैतिल', 'Taitila'], ['गर', 'Gara'], ['वणिज', 'Vaṇija'], ['विष्टि', 'Viṣṭi']];
+const KFIX = { 0: ['किंस्तुघ्न', 'Kiṁstughna'], 57: ['शकुनि', 'Śakuni'], 58: ['चतुष्पद', 'Catuṣpada'], 59: ['नाग', 'Nāga'] };
+const karana = k => KFIX[k] ? [...KFIX[k], 'sthira · fixed'] : [...KMOV[(k - 1) % 7], 'cara · moving'];
+const VARA = [
+  ['रविवार', 'Ravivāra', 'Sūrya', 'Sunday'], ['सोमवार', 'Somavāra', 'Candra', 'Monday'], ['मङ्गलवार', 'Maṅgalavāra', 'Maṅgala', 'Tuesday'],
+  ['बुधवार', 'Budhavāra', 'Budha', 'Wednesday'], ['गुरुवार', 'Guruvāra', 'Bṛhaspati', 'Thursday'], ['शुक्रवार', 'Śukravāra', 'Śukra', 'Friday'],
+  ['शनिवार', 'Śanivāra', 'Śani', 'Saturday'],
+];
+const RASI = [['मेष', 'Meṣa'], ['वृषभ', 'Vṛṣabha'], ['मिथुन', 'Mithuna'], ['कर्क', 'Karka'], ['सिंह', 'Siṁha'], ['कन्या', 'Kanyā'],
+  ['तुला', 'Tulā'], ['वृश्चिक', 'Vṛścika'], ['धनु', 'Dhanu'], ['मकर', 'Makara'], ['कुम्भ', 'Kumbha'], ['मीन', 'Mīna']];
+const MASA = [['चैत्र', 'Caitra'], ['वैशाख', 'Vaiśākha'], ['ज्येष्ठ', 'Jyeṣṭha'], ['आषाढ', 'Āṣāḍha'], ['श्रावण', 'Śrāvaṇa'], ['भाद्रपद', 'Bhādrapada'],
+  ['आश्विन', 'Āśvina'], ['कार्तिक', 'Kārtika'], ['मार्गशीर्ष', 'Mārgaśīrṣa'], ['पौष', 'Pauṣa'], ['माघ', 'Māgha'], ['फाल्गुन', 'Phālguna']];
+const RITU = [['वसन्त', 'Vasanta', 'spring'], ['ग्रीष्म', 'Grīṣma', 'summer'], ['वर्षा', 'Varṣā', 'rains'], ['शरद्', 'Śarad', 'autumn'], ['हेमन्त', 'Hemanta', 'early winter'], ['शिशिर', 'Śiśira', 'late winter']];
+const SAMV = 'Prabhava Vibhava Śukla Pramoda Prajāpati Āṅgirasa Śrīmukha Bhāva Yuvan Dhātṛ Īśvara Bahudhānya Pramāthin Vikrama Vṛṣa Citrabhānu Subhānu Tāraṇa Pārthiva Vyaya Sarvajit Sarvadhārin Virodhin Vikṛti Khara Nandana Vijaya Jaya Manmatha Durmukha Hemalamba Vilamba Vikārin Śārvarī Plava Śubhakṛt Śobhakṛt Krodhin Viśvāvasu Parābhava Plavaṅga Kīlaka Saumya Sādhāraṇa Virodhakṛt Paridhāvin Pramādin Ānanda Rākṣasa Nala Piṅgala Kālayukta Siddhārthin Raudra Durmati Dundubhi Rudhirodgārin Raktākṣa Krodhana Akṣaya'.split(' ');
+const MUH_DAY = ['Rudra', 'Āhi', 'Mitra', 'Pitṛ', 'Vasu', 'Vārāha', 'Viśvedeva', 'Abhijit', 'Satamukhī', 'Puruhūta', 'Vāhinī', 'Naktanakarā', 'Varuṇa', 'Aryaman', 'Bhaga'];
+const MUH_NIGHT = ['Girīśa', 'Ajapāda', 'Ahirbudhnya', 'Pūṣan', 'Aśvinī', 'Yama', 'Agni', 'Vidhātṛ', 'Caṇḍa', 'Aditi', 'Jīva', 'Viṣṇu', 'Dyumadgadyuti', 'Brahmā', 'Samudra'];
+// horā lords in Chaldean order, starting from the Sun
+const HORA = [['सू', 'Sūrya'], ['शु', 'Śukra'], ['बु', 'Budha'], ['चं', 'Candra'], ['श', 'Śani'], ['गु', 'Guru'], ['मं', 'Maṅgala']];
+const VARA_HORA = [0, 3, 6, 2, 5, 1, 4]; // weekday → index in HORA
+const RAHU = [8, 2, 7, 5, 6, 4, 3], YAMA = [5, 4, 3, 2, 1, 7, 6], GULI = [7, 6, 5, 4, 3, 2, 1];
+const CITIES = [
+  ['Ujjain', 23.1765, 75.7885], ['Vārāṇasī', 25.3176, 82.9739], ['Delhi', 28.6139, 77.209], ['Mumbai', 19.076, 72.8777],
+  ['Chennai', 13.0827, 80.2707], ['Kolkata', 22.5726, 88.3639], ['Bengaluru', 12.9716, 77.5946], ['Pune', 18.5204, 73.8567],
+  ['Hyderabad', 17.385, 78.4867], ['Ahmedabad', 23.0225, 72.5714], ['Guwahati', 26.1445, 91.7362], ['Purī', 19.8135, 85.8312],
+];
+/* festivals on the amānta calendar: [māsa, tithi 1–30, rule, name] — rule picks the moment the tithi must hold */
+const FEST = [
+  [0, 1, 'udaya', 'Ugādi · Guḍi Pāḍavā'], [0, 9, 'madhya', 'Rāma Navamī'], [1, 3, 'udaya', 'Akṣaya Tṛtīyā'],
+  [3, 11, 'udaya', 'Devaśayanī Ekādaśī'], [3, 15, 'udaya', 'Guru Pūrṇimā'], [4, 5, 'udaya', 'Nāga Pañcamī'],
+  [4, 15, 'udaya', 'Rakṣā Bandhan'], [4, 23, 'nisitha', 'Kṛṣṇa Janmāṣṭamī'], [5, 4, 'madhya', 'Gaṇeśa Caturthī'],
+  [6, 1, 'udaya', 'Navarātri begins'], [6, 10, 'aparahna', 'Vijayādaśamī'], [6, 15, 'pradosa', 'Śarad Pūrṇimā'],
+  [6, 19, 'pradosa', 'Karvā Cauth'], [6, 28, 'pradosa', 'Dhanterās'], [6, 30, 'pradosa', 'Dīpāvalī · Lakṣmī Pūjā'],
+  [7, 1, 'udaya', 'Govardhana Pūjā'], [7, 2, 'aparahna', 'Bhāī Dūj'], [7, 6, 'pradosa', 'Chaṭh Pūjā'],
+  [7, 11, 'udaya', 'Prabodhinī Ekādaśī'], [7, 15, 'pradosa', 'Dev Dīpāvalī'], [10, 5, 'udaya', 'Vasanta Pañcamī'],
+  [10, 29, 'nisitha', 'Mahāśivarātri'], [11, 15, 'pradosa', 'Holikā Dahan'], [11, 16, 'udaya', 'Holī'],
+];
+const VRATA = [[11, 'udaya', 'Ekādaśī vrata'], [26, 'udaya', 'Ekādaśī vrata'], [13, 'pradosa', 'Pradoṣa'], [28, 'pradosa', 'Pradoṣa'],
+  [4, 'madhya', 'Vināyaka Caturthī'], [19, 'pradosa', 'Saṅkaṣṭī Caturthī'], [29, 'nisitha', 'Māsika Śivarātri'], [15, 'udaya', 'Pūrṇimā'], [30, 'udaya', 'Amāvasyā']];
+const RULE_WORD = { udaya: 'at sunrise', aparahna: 'in the afternoon', madhya: 'at midday', pradosa: 'at dusk', nisitha: 'at midnight' };
+
+/* ---------- helpers ---------- */
+const fmtS = ms => { const p = new Date(ms + IST); return fmt(ms) + ':' + String(p.getUTCSeconds()).padStart(2, '0'); };
+const DIG = '०१२३४५६७८९';
+const dn = n => String(n).replace(/\d/g, d => DIG[d]);
+const tithiName = n => n === 30 ? AMA : TITHI[(n - 1) % 15];
+const pakshaOf = n => n <= 15 ? ['शुक्ल', 'Śukla', 'bright half'] : ['कृष्ण', 'Kṛṣṇa', 'dark half'];
+const degFmt = x => { const d = Math.floor(x), m = Math.floor((x - d) * 60); return `${d}°${String(m).padStart(2, '0')}′`; };
+const degFmtS = x => { const s = Math.floor(x * 3600), d = Math.floor(s / 3600), m = Math.floor(s / 60) % 60; return `${d}°${String(m).padStart(2, '0')}′${String(s % 60).padStart(2, '0')}″`; };
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const ymdKey = (y, m, d) => `${y}-${m}-${d}`;
+const addDays = (y, m, d, k) => { const x = new Date(Date.UTC(y, m, d + k)); return [x.getUTCFullYear(), x.getUTCMonth(), x.getUTCDate()]; };
+const $ = s => document.querySelector(s);
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, parent, text) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function ghati(ms) { const g = ms / (24 * 60000); const G = Math.floor(g); return [G, Math.floor((g - G) * 60)]; }
+// 1 ghaṭī = 60 pala = 3600 vipala; a vipala is 0.4 s
+function ghatiFull(ms) { const v = Math.floor(ms / 400); return `${Math.floor(v / 3600)} gh ${Math.floor(v / 60) % 60} pa ${String(v % 60).padStart(2, '0')} vi`; }
+function stamp(ms, ref) { // time, prefixed with weekday when it falls on another civil day than ref
+  const a = istParts(ms), b = istParts(ref);
+  return (a.d !== b.d ? WD[a.wd] + ' ' : '') + fmt(ms);
+}
+function litPath(e, r) {
+  const k = cos(e), waxing = e < 180, rx = Math.max(0.01, Math.abs(k) * r);
+  const crescent = k > 0;
+  return `M0 ${-r}A${r} ${r} 0 0 ${waxing ? 1 : 0} 0 ${r}A${rx} ${r} 0 0 ${crescent === waxing ? 0 : 1} 0 ${-r}Z`;
+}
+function mix(a, b, k) {
+  const pa = a.match(/\w\w/g).map(h => parseInt(h, 16)), pb = b.match(/\w\w/g).map(h => parseInt(h, 16));
+  return '#' + pa.map((v, i) => Math.round(v + (pb[i] - v) * k).toString(16).padStart(2, '0')).join('');
+}
+
+/* ---------- state ---------- */
+const S = { city: 0, ymd: null, t: Date.now(), playing: false, live: true };
+let DAY_ = null, WEAVE = null;
+
+function dayData(y, m, d) {
+  const [la, lo] = [CITIES[S.city][1], CITIES[S.city][2]];
+  const ev = sunEvents(y, m, d, la, lo);
+  const nx = sunEvents(...addDays(y, m, d, 1), la, lo);
+  const pv = sunEvents(...addDays(y, m, d, -1), la, lo);
+  return { y, m, d, rise: ev.rise, set: ev.set, next: nx.rise, prevRise: pv.rise, nextSet: nx.set };
+}
+function computeDay(y, m, d) {
+  const D = dayData(y, m, d);
+  D.spans = {};
+  for (const k of ['tithi', 'nakshatra', 'yoga', 'karana']) D.spans[k] = spans(k, D.rise, D.next);
+  D.wd = istParts(D.rise).wd;
+  D.masa = masaInfo(D.rise);
+  D.tRise = idx('tithi', D.rise); D.tPrev = idx('tithi', D.prevRise); D.tNext = idx('tithi', D.next);
+  D.ksaya = D.spans.tithi.slice(1, -1);
+  D.vrddhi = D.tRise === D.tPrev;
+  const ra = Math.floor(sunSid(D.rise) / 30), rb = Math.floor(sunSid(D.next) / 30);
+  if (ra !== rb) {
+    let a = D.rise, b = D.next;
+    while (b - a > 30000) { const mm = (a + b) / 2; if (Math.floor(sunSid(mm) / 30) === ra) a = mm; else b = mm; }
+    D.sankranti = { t: b, r: rb };
+  }
+  const part = (D.set - D.rise) / 8;
+  const kal = (n) => [D.rise + (n - 1) * part, D.rise + n * part];
+  D.kala = [['Rāhu kāla', kal(RAHU[D.wd]), 'var(--sindoor)', 'राहु'], ['Yamagaṇḍa', kal(YAMA[D.wd]), 'var(--lapis)', 'यम'], ['Gulika', kal(GULI[D.wd]), 'var(--malachite)', 'गुलिक']];
+  const dm = (D.set - D.rise) / 15, nm = (D.next - D.set) / 15;
+  D.muh = [];
+  for (let i = 0; i < 15; i++) D.muh.push([D.rise + i * dm, D.rise + (i + 1) * dm, MUH_DAY[i], i === 7 && D.wd !== 3 ? 'abhijit' : '']);
+  for (let i = 0; i < 15; i++) D.muh.push([D.set + i * nm, D.set + (i + 1) * nm, MUH_NIGHT[i], i === 13 ? 'brahma' : '']);
+  const dh = (D.set - D.rise) / 12, nh = (D.next - D.set) / 12;
+  D.hora = [];
+  for (let i = 0; i < 24; i++) {
+    const a = i < 12 ? D.rise + i * dh : D.set + (i - 12) * nh, b = a + (i < 12 ? dh : nh);
+    D.hora.push([a, b, HORA[(VARA_HORA[D.wd] + i) % 7]]);
+  }
+  return D;
+}
+function ruleTime(D, rule) {
+  return rule === 'udaya' ? D.rise + 60000 : rule === 'madhya' ? (D.rise + D.set) / 2
+    : rule === 'aparahna' ? D.rise + (D.set - D.rise) * 0.7
+    : rule === 'pradosa' ? D.set + 60 * 60000 : (D.set + D.next) / 2;
+}
+function computeWeave(masa) {
+  const days = [];
+  const p = istParts(masa.prevNM), q = istParts(masa.nextNM);
+  let [y, m, d] = addDays(p.y, p.m, p.d, -1);
+  const stop = Date.UTC(...addDays(q.y, q.m, q.d, 1));
+  while (Date.UTC(y, m, d) <= stop) {
+    const D = dayData(y, m, d);
+    if (D.rise >= masa.prevNM && D.rise < masa.nextNM) { D.n = idx('tithi', D.rise) + 1; D.fest = []; D.vrata = []; days.push(D); }
+    [y, m, d] = addDays(y, m, d, 1);
+  }
+  const used = new Set();
+  const inMonth = T => T >= masa.prevNM && T < masa.nextNM;
+  for (const D of days) {
+    for (const [ms, n, rule, name] of FEST) {
+      if (used.has(name) || masa.adhika || ms !== masa.amanta) continue;
+      const T = ruleTime(D, rule);
+      if (inMonth(T) && idx('tithi', T) + 1 === n) { used.add(name); D.fest.push([name, rule]); }
+    }
+    for (const [n, rule, name] of VRATA) {
+      const key = name + n;
+      if (used.has(key)) continue;
+      const T = ruleTime(D, rule);
+      if (inMonth(T) && idx('tithi', T) + 1 === n) { used.add(key); D.vrata.push([name, rule]); }
+    }
+  }
+  const cells = Array.from({ length: 30 }, (_, i) => ({ n: i + 1, days: days.filter(D => D.n === i + 1) }));
+  return { masa, days, cells };
+}
+
+/* ---------- the wheel ---------- */
+const C = 500;
+const pt = (lon, r) => { const a = (-90 - lon) * D2R; return [C + r * Math.cos(a), C + r * Math.sin(a)]; };
+function sector(l1, l2, r1, r2) {
+  const [ax, ay] = pt(l1, r2), [bx, by] = pt(l2, r2), [cx, cy] = pt(l2, r1), [dx, dy] = pt(l1, r1);
+  const lg = l2 - l1 > 180 ? 1 : 0;
+  return `M${ax.toFixed(2)} ${ay.toFixed(2)}A${r2} ${r2} 0 ${lg} 0 ${bx.toFixed(2)} ${by.toFixed(2)}L${cx.toFixed(2)} ${cy.toFixed(2)}A${r1} ${r1} 0 ${lg} 1 ${dx.toFixed(2)} ${dy.toFixed(2)}Z`;
+}
+function arcText(g, lon, r, str, cls) {
+  const [x, y] = pt(lon, r);
+  const L = norm(lon);
+  const rot = -L + (L > 90 && L < 270 ? 180 : 0);
+  return el('text', { x: x.toFixed(2), y: y.toFixed(2), class: cls, 'text-anchor': 'middle', 'dominant-baseline': 'central', transform: `rotate(${rot.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)})` }, g, str);
+}
+const W = {};
+const NW = 360 / 27;
+const DARK = '1f2a58', LIGHT = 'f8efd2';
+function buildWheel() {
+  const svg = $('#wheel');
+  const defs = el('defs', {}, svg);
+  const rg = el('radialGradient', { id: 'field', cx: '50%', cy: '50%', r: '50%' }, defs);
+  el('stop', { offset: '0%', 'stop-color': '#FBF4DF' }, rg); el('stop', { offset: '100%', 'stop-color': '#EFE2BE' }, rg);
+  const glow = el('radialGradient', { id: 'sunglow' }, defs);
+  el('stop', { offset: '0%', 'stop-color': '#F7C64A', 'stop-opacity': '.9' }, glow); el('stop', { offset: '100%', 'stop-color': '#F7C64A', 'stop-opacity': '0' }, glow);
+
+  el('circle', { cx: C, cy: C, r: 496, fill: '#F5EBCD', stroke: 'var(--sindoor)', 'stroke-width': 2.5 }, svg);
+  el('circle', { cx: C, cy: C, r: 489, fill: 'none', stroke: 'var(--sindoor)', 'stroke-width': .8 }, svg);
+
+  // 1 · nakṣatra ring with 108 pādas
+  W.nak = []; W.nakT = [];
+  const gN = el('g', {}, svg);
+  for (let i = 0; i < 27; i++) {
+    const p = el('path', { d: sector(i * NW, (i + 1) * NW, 420, 486), class: 'seg-nak' + (i % 2 ? ' alt' : ''), 'data-tip': `nak:${i}` }, gN);
+    W.nak.push(p);
+    W.nakT.push(arcText(gN, i * NW + NW / 2, 459, NAK[i][0], 'w-nak'));
+    arcText(gN, i * NW + NW / 2, 431, dn(i + 1), 'w-num');
+  }
+  for (let i = 0; i < 108; i++) {
+    const l = i * NW / 4, big = i % 4 === 0;
+    const [a, b] = pt(l, big ? 404 : 412), [c, d] = pt(l, 420);
+    el('line', { x1: a, y1: b, x2: c, y2: d, stroke: big ? 'var(--ink-soft)' : 'var(--ink-faint)', 'stroke-width': big ? 1.2 : .7 }, gN);
+  }
+  // 2 · rāśi ring
+  W.ras = []; W.rasT = [];
+  for (let i = 0; i < 12; i++) {
+    W.ras.push(el('path', { d: sector(i * 30, i * 30 + 30, 360, 404), class: 'seg-ras', 'data-tip': `ras:${i}` }, svg));
+    W.rasT.push(arcText(svg, i * 30 + 15, 382, RASI[i][0], 'w-ras'));
+  }
+  // 3 · yoga ring
+  W.yoga = []; W.yogaT = [];
+  for (let i = 0; i < 27; i++) {
+    W.yoga.push(el('path', { d: sector(i * NW, (i + 1) * NW, 320, 354), class: 'seg-yoga' + (YOGA[i][2] ? '' : ' bad'), 'data-tip': `yoga:${i}` }, svg));
+    W.yogaT.push(arcText(svg, i * NW + NW / 2, 337, YOGA[i][0], 'w-yoga'));
+  }
+  // Citrā (Spica) anchors the sidereal zodiac at 180°; Aśvinī 0° opposite it
+  const [sx, sy] = pt(180, 498 - 8);
+  el('path', { d: `M${sx} ${sy - 9}l6 9-6 9-6-9z`, fill: 'var(--lapis)', 'data-tip': 'spica' }, svg);
+  const [zx, zy] = pt(0, 490);
+  el('path', { d: `M${zx - 7} ${zy - 6}h14l-7 12z`, fill: 'var(--sindoor)', 'data-tip': 'zero' }, svg);
+
+  // 4/5 · tithi ring and karaṇa ticks, rotating with the Sun
+  W.tg = el('g', {}, svg);
+  W.tithi = []; W.tithiT = [];
+  for (let i = 0; i < 30; i++) {
+    const k = (1 - cos(12 * i + 6)) / 2;
+    const p = el('path', { d: sector(12 * i, 12 * i + 12, 242, 306), class: 'seg-tithi', fill: mix(DARK, LIGHT, k), 'data-tip': `tithi:${i}` }, W.tg);
+    W.tithi.push(p);
+    const n = i + 1, lab = n === 15 ? 'पू' : n === 30 ? 'अ' : dn(n > 15 ? n - 15 : n);
+    const t = arcText(W.tg, 12 * i + 6, 274, lab, 'w-tithi');
+    t.setAttribute('fill', k > .45 ? 'var(--ink)' : 'var(--leaf-lit)');
+    W.tithiT.push(t);
+  }
+  W.kar = [];
+  for (let k = 0; k < 60; k++) {
+    const vis = !KFIX[k] && (k - 1) % 7 === 6, fixed = !!KFIX[k];
+    W.kar.push(el('path', { d: sector(6 * k + .4, 6 * k + 5.6, 228, 238), class: 'seg-kar', fill: vis ? 'var(--sindoor)' : fixed ? 'var(--geru)' : (k % 2 ? '#D8C38E' : '#EADBB0'), 'data-tip': `kar:${k}` }, W.tg));
+  }
+  // paksha labels riding the tithi ring
+  arcText(W.tg, 90, 316, 'शुक्ल पक्ष', 'w-cap').setAttribute('style', 'font-family:var(--f-deva);font-size:12px;fill:var(--ink-soft)');
+  arcText(W.tg, 270, 316, 'कृष्ण पक्ष', 'w-cap').setAttribute('style', 'font-family:var(--f-deva);font-size:12px;fill:var(--ink-soft)');
+
+  // inner field
+  el('circle', { cx: C, cy: C, r: 224, fill: 'url(#field)', stroke: 'var(--rule)' }, svg);
+  W.arc = el('path', { fill: 'rgba(212,150,24,.11)', stroke: 'var(--haldi)', 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, svg);
+  W.arcT = el('text', { class: 'w-cap', 'text-anchor': 'middle', 'dominant-baseline': 'central', style: 'font-size:15px;fill:var(--geru);letter-spacing:.02em;font-variant:normal' }, svg);
+  W.sunL = el('line', { stroke: 'var(--haldi)', 'stroke-width': 2.5 }, svg);
+  W.moonL = el('line', { stroke: 'var(--lapis)', 'stroke-width': 2, 'stroke-dasharray': '6 4' }, svg);
+  W.yogaB = el('path', { d: 'M0 -10l7 10-7 10-7-10z', fill: 'var(--malachite)', stroke: 'var(--leaf-lit)', 'stroke-width': 1.5 }, svg);
+  // sun emblem
+  W.sun = el('g', { 'data-tip': 'sun' }, svg);
+  el('circle', { r: 30, fill: 'url(#sunglow)' }, W.sun);
+  for (let i = 0; i < 12; i++) { const a = i * 30 * D2R; el('line', { x1: 16 * Math.cos(a), y1: 16 * Math.sin(a), x2: 23 * Math.cos(a), y2: 23 * Math.sin(a), stroke: 'var(--haldi)', 'stroke-width': 2.4, 'stroke-linecap': 'round' }, W.sun); }
+  el('circle', { r: 12, fill: 'var(--haldi)', stroke: 'var(--geru)', 'stroke-width': 1.2 }, W.sun);
+  // moon emblem
+  W.moon = el('g', { 'data-tip': 'moon' }, svg);
+  el('circle', { r: 14, fill: 'var(--lapis-deep)' }, W.moon);
+  W.moonLit = el('path', { fill: '#F4E9C8' }, W.moon);
+  el('circle', { r: 14, fill: 'none', stroke: 'var(--lapis)', 'stroke-width': 1.5 }, W.moon);
+  // centre
+  W.cMoon = el('g', { transform: `translate(${C} ${C - 62})` }, svg);
+  el('circle', { r: 60, fill: 'var(--lapis-deep)' }, W.cMoon);
+  W.cLit = el('path', { fill: '#F6EDCF' }, W.cMoon);
+  el('circle', { r: 60, fill: 'none', stroke: 'rgba(30,53,112,.6)', 'stroke-width': 2 }, W.cMoon);
+  W.cDev = el('text', { x: C, y: C + 46, 'text-anchor': 'middle', style: 'font-family:var(--f-display);font-weight:600;font-size:38px;fill:var(--ink)' }, svg);
+  W.cIast = el('text', { x: C, y: C + 76, 'text-anchor': 'middle', style: 'font-family:var(--f-body);font-style:italic;font-size:18px;fill:var(--ink-soft)' }, svg);
+  W.cPak = el('text', { x: C, y: C + 102, 'text-anchor': 'middle', class: 'w-cap', style: 'font-size:13px' }, svg);
+  W.cIll = el('text', { x: C, y: C + 124, 'text-anchor': 'middle', class: 'w-cap', style: 'font-size:12px;letter-spacing:.06em;font-variant:normal;fill:var(--ink-faint)' }, svg);
+}
+let lastOn = {};
+function setOn(group, cls, i, key) {
+  if (lastOn[key] === i) return;
+  if (lastOn[key] != null) { W[group][lastOn[key]].classList.remove(cls); W[group + 'T'] && W[group + 'T'][lastOn[key]].classList.remove('on-t'); }
+  W[group][i].classList.add(cls); W[group + 'T'] && W[group + 'T'][i].classList.add('on-t');
+  lastOn[key] = i;
+}
+function renderWheel(t) {
+  const s = sunSid(t), m = moonSid(t), e = norm(m - s);
+  W.tg.setAttribute('transform', `rotate(${(-s).toFixed(3)} ${C} ${C})`);
+  const ni = Math.floor(m / NW), ri = Math.floor(m / 30), yi = Math.floor(norm(s + m) / NW), ti = Math.floor(e / 12);
+  setOn('nak', 'on', ni, 'nak'); setOn('ras', 'on', ri, 'ras'); setOn('yoga', 'on', yi, 'yoga'); setOn('tithi', 'on', ti, 'tithi');
+  // the tithi text keeps its own lit/dark colour; only the segment outline marks it
+  W.tithiT.forEach(x => x.classList.remove('on-t'));
+  const sn = Math.floor(s / NW);
+  if (lastOn.sunNak !== sn) { if (lastOn.sunNak != null) W.nak[lastOn.sunNak].classList.remove('sun'); W.nak[sn].classList.add('sun'); lastOn.sunNak = sn; }
+  const line = (L, l) => { const [a, b] = pt(l, 226), [c, d] = pt(l, 486); L.setAttribute('x1', a); L.setAttribute('y1', b); L.setAttribute('x2', c); L.setAttribute('y2', d); };
+  line(W.sunL, s); line(W.moonL, m);
+  const [ax, ay] = pt(s, 196), [bx, by] = pt(m, 196);
+  W.sun.setAttribute('transform', `translate(${ax} ${ay})`);
+  W.moon.setAttribute('transform', `translate(${bx} ${by})`);
+  W.moonLit.setAttribute('d', litPath(e, 14));
+  const [p1x, p1y] = pt(s, 212), [p2x, p2y] = pt(s + e, 212);
+  W.arc.setAttribute('d', e < .3 ? '' : `M${C} ${C}L${p1x} ${p1y}A212 212 0 ${e > 180 ? 1 : 0} 0 ${p2x} ${p2y}Z`);
+  const [lx, ly] = pt(s + e / 2, 168);
+  W.arcT.setAttribute('x', lx); W.arcT.setAttribute('y', ly);
+  W.arcT.textContent = e > 14 ? degFmtS(e) : '';
+  const [yx, yy] = pt(norm(s + m), 337);
+  W.yogaB.setAttribute('transform', `translate(${yx} ${yy}) rotate(${-norm(s + m)})`);
+  W.cLit.setAttribute('d', litPath(e, 60));
+  const n = ti + 1, tn = tithiName(n), pk = pakshaOf(n);
+  W.cDev.textContent = tn[0];
+  W.cIast.textContent = tn[1];
+  W.cPak.textContent = `${pk[1]} pakṣa · tithi ${n > 15 ? n - 15 : n} of 15`;
+  W.cIll.textContent = `${Math.round((1 - cos(e)) / 2 * 100)}% lit · ${e < 180 ? 'waxing' : 'waning'}`;
+}
+
+/* ---------- five limbs ---------- */
+const LIMB_DEF = [
+  ['tithi', 'तिथि', 'Tithi', 'lunar day'], ['vara', 'वार', 'Vāra', 'weekday'], ['nakshatra', 'नक्षत्र', 'Nakṣatra', 'lunar mansion'],
+  ['yoga', 'योग', 'Yoga', 'luni-solar sum'], ['karana', 'करण', 'Karaṇa', 'half tithi'],
+];
+function buildLimbs() {
+  $('#limbs').innerHTML = LIMB_DEF.map(([k, dev, ia, en]) => `
+    <article class="leaf" id="L-${k}">
+      <div class="lab"><span class="deva">${dev}</span><span>${ia} · ${en}</span></div>
+      <div class="body">
+        <div class="val"><span class="big"></span><span class="iast"></span><span class="gloss"></span></div>
+        <div class="bar"><i></i></div>
+        <div class="span"><span class="from"></span><span class="to"></span></div>
+        <div class="formula"></div>
+        <div class="chips"></div>
+      </div>
+    </article>`).join('');
+}
+const winCache = new Map();
+function win(k, t) {
+  const i = idx(k, t), key = k + ':' + i + ':' + Math.round(t / (6 * 864e5));
+  let w = winCache.get(key);
+  if (!w || t < w.start || t > w.end) { w = limbWindow(k, t); winCache.set(key, w); }
+  return w;
+}
+function fillLimb(k, o) {
+  const r = $('#L-' + k);
+  r.querySelector('.big').textContent = o.dev;
+  r.querySelector('.iast').textContent = o.iast;
+  r.querySelector('.gloss').textContent = o.gloss || '';
+  r.querySelector('.bar i').style.width = (o.frac * 100).toFixed(1) + '%';
+  r.querySelector('.from').textContent = o.from;
+  r.querySelector('.to').textContent = o.to;
+  r.querySelector('.formula').innerHTML = o.formula;
+  r.querySelector('.chips').innerHTML = o.chips.map(c => Array.isArray(c) ? `<span class="chip ${c[1]}">${c[0]}</span>` : `<span class="chip">${c}</span>`).join('');
+}
+function renderLimbs(t) {
+  const D = DAY_;
+  const s = sunSid(t), m = moonSid(t), e = norm(m - s);
+  // tithi
+  let w = win('tithi', t), n = w.i + 1, tn = tithiName(n), pk = pakshaOf(n);
+  const nn = n % 30 + 1;
+  fillLimb('tithi', {
+    dev: tn[0], iast: tn[1], gloss: `${pk[1]} ${n > 15 ? n - 15 : n} · ${pk[2]}`,
+    frac: limbs.tithi(t) - w.i, from: `began ${stamp(w.start, t)}`, to: `${tithiName(nn)[1]} from ${stamp(w.end, t)}`,
+    formula: `☾ − ☉ = <b>${degFmtS(e)}</b> &nbsp;÷ 12° = ${(e / 12).toFixed(4)} → tithi <b>${n}</b>`,
+    chips: [`deity ${tn[2]}`, TCLASS[(n - 1) % 5], idx('tithi', D.rise) === w.i ? ['udaya tithi · names this day', 'good'] : ['not the sunrise tithi', 'warn']],
+  });
+  // vāra
+  const v = VARA[D.wd], h = D.hora.find(x => t >= x[0] && t < x[1]) || D.hora[0];
+  fillLimb('vara', {
+    dev: v[0], iast: v[1], gloss: `${v[3]} · ruled by ${v[2]}`,
+    frac: (t - D.rise) / (D.next - D.rise), from: `sunrise ${stamp(D.rise, t)}`, to: `next sunrise ${stamp(D.next, t)}`,
+    formula: `iṣṭakāla since sunrise: <b>${ghatiFull(t - D.rise)}</b>`,
+    chips: [`horā now: ${h[2][1]}`, `dinamāna ${ghati(D.set - D.rise)[0]} gh ${ghati(D.set - D.rise)[1]} pa`, `sunset ${fmt(D.set)}`],
+  });
+  // nakṣatra
+  w = win('nakshatra', t);
+  const N = NAK[w.i], pada = Math.floor((m % NW) / (NW / 4)) + 1;
+  fillLimb('nakshatra', {
+    dev: N[0], iast: N[1], gloss: `pāda ${pada} of 4 · Moon in ${RASI[Math.floor(m / 30)][1]}`,
+    frac: limbs.nakshatra(t) - w.i, from: `Moon entered ${stamp(w.start, t)}`, to: `${NAK[(w.i + 1) % 27][1]} from ${stamp(w.end, t)}`,
+    formula: `☾ sidereal <b>${degFmtS(m)}</b> ÷ 13°20′ = ${(m / NW).toFixed(4)} → <b>${w.i + 1}</b>`,
+    chips: [`deity ${N[2]}`, `daśā lord ${N[3]}`, `${N[4]} gaṇa`],
+  });
+  // yoga
+  w = win('yoga', t);
+  const Y = YOGA[w.i], sum = norm(s + m);
+  fillLimb('yoga', {
+    dev: Y[0], iast: Y[1], gloss: `${w.i + 1} of 27`,
+    frac: limbs.yoga(t) - w.i, from: `began ${stamp(w.start, t)}`, to: `${YOGA[(w.i + 1) % 27][1]} from ${stamp(w.end, t)}`,
+    formula: `☉ ${degFmt(s)} + ☾ ${degFmt(m)} = <b>${degFmt(sum)}</b> ÷ 13°20′ → <b>${w.i + 1}</b>`,
+    chips: [Y[2] ? ['auspicious', 'good'] : ['inauspicious', 'warn']],
+  });
+  // karaṇa
+  w = win('karana', t);
+  const K = karana(w.i);
+  fillLimb('karana', {
+    dev: K[0], iast: K[1], gloss: `${w.i + 1} of 60 · ${w.i % 2 ? 'second' : 'first'} half of ${tithiName(Math.floor(w.i / 2) + 1)[1]}`,
+    frac: limbs.karana(t) - w.i, from: `began ${stamp(w.start, t)}`, to: `${karana((w.i + 1) % 60)[1]} from ${stamp(w.end, t)}`,
+    formula: `☾ − ☉ = ${degFmt(e)} ÷ 6° = ${(e / 6).toFixed(2)} → <b>${w.i + 1}</b>`,
+    chips: [K[2], K[1] === 'Viṣṭi' ? ['Bhadrā · avoid beginnings', 'warn'] : ['fit for work', 'good']],
+  });
+}
+
+/* ---------- header facts ---------- */
+function renderFacts(t) {
+  const D = DAY_, M = D.masa;
+  const p = istParts(D.rise);
+  const n = D.tRise + 1;
+  const purn = n > 15 ? (M.amanta + 1) % 12 : M.amanta;
+  const shaka = (M.amanta >= 9 && p.m <= 3) ? p.y - 79 : p.y - 78;
+  const sun = sunSid(t), ritu = RITU[Math.floor(M.amanta / 2)];
+  const sr = Math.floor(sun / 30), uttara = sr >= 9 || sr <= 2;
+  const items = [
+    ['Date', `${WD[p.wd]} ${p.d} ${MON[p.m]} ${p.y}`],
+    ['Saṁvat', `Vikrama ${shaka + 135} · Śaka ${shaka}`],
+    ['Saṁvatsara', SAMV[(shaka + 11) % 60]],
+    ['Māsa (amānta / pūrṇimānta)', `<span class="deva">${M.adhika ? 'अधिक ' : ''}${MASA[M.amanta][0]}</span>${M.adhika ? 'Adhika ' : ''}${MASA[M.amanta][1]}${purn !== M.amanta ? ' / ' + MASA[purn][1] : ''}`],
+    ['Ṛtu · Ayana', `<span class="deva">${ritu[0]}</span>${ritu[1]} · ${uttara ? 'Uttarāyaṇa' : 'Dakṣiṇāyana'}`],
+    ['Sun · Moon', `${RASI[sr][1]} · ${RASI[Math.floor(moonSid(t) / 30)][1]}`],
+    ['Sunrise · Sunset', `${fmt(D.rise)} · ${fmt(D.set)}`],
+  ];
+  $('#facts').innerHTML = items.map(([k, v]) => `<div><dt>${k}</dt><dd class="num">${v}</dd></div>`).join('');
+}
+
+/* ---------- ribbon ---------- */
+const RX0 = 120, RX1 = 1186;
+const ROWS = { sky: [26, 70], muh: [76, 96], kal: [100, 116], tithi: [124, 152], nakshatra: [158, 186], yoga: [192, 220], karana: [226, 250], hora: [258, 278] };
+let RB = {};
+function xOf(ms) { return RX0 + (ms - DAY_.rise) / (DAY_.next - DAY_.rise) * (RX1 - RX0); }
+function msOf(x) { return DAY_.rise + (Math.min(RX1, Math.max(RX0, x)) - RX0) / (RX1 - RX0) * (DAY_.next - DAY_.rise); }
+function buildRibbon() {
+  const D = DAY_, svg = $('#ribbon');
+  svg.innerHTML = '';
+  const defs = el('defs', {}, svg);
+  const g1 = el('linearGradient', { id: 'skyday', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+  el('stop', { offset: 0, 'stop-color': '#F6DC94' }, g1); el('stop', { offset: 1, 'stop-color': '#FBF0D2' }, g1);
+  const g2 = el('linearGradient', { id: 'skynight', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+  el('stop', { offset: 0, 'stop-color': '#1C2652' }, g2); el('stop', { offset: 1, 'stop-color': '#34437A' }, g2);
+  const [y0, y1] = ROWS.sky;
+  el('rect', { x: RX0, y: y0, width: xOf(D.set) - RX0, height: y1 - y0, fill: 'url(#skyday)', rx: 3 }, svg);
+  el('rect', { x: xOf(D.set), y: y0, width: RX1 - xOf(D.set), height: y1 - y0, fill: 'url(#skynight)', rx: 3 }, svg);
+  // stars at night (deterministic scatter)
+  for (let i = 0; i < 40; i++) {
+    const x = xOf(D.set) + 8 + (i * 37 % 100) / 100 * (RX1 - xOf(D.set) - 16);
+    const y = y0 + 6 + (i * 53 % 100) / 100 * (y1 - y0 - 12);
+    el('circle', { cx: x, cy: y, r: i % 5 ? .8 : 1.4, fill: '#F4E7C2', opacity: .7 }, svg);
+  }
+  // sun path
+  const sx0 = RX0, sx1 = xOf(D.set);
+  el('path', { d: `M${sx0} ${y1}Q${(sx0 + sx1) / 2} ${y0 - 34} ${sx1} ${y1}`, fill: 'none', stroke: 'var(--haldi)', 'stroke-width': 1.5, 'stroke-dasharray': '3 4' }, svg);
+  el('text', { x: RX0 + 6, y: y1 - 6, class: 'r-time', style: 'fill:var(--geru)' }, svg, `sunrise ${fmt(D.rise)}`);
+  el('text', { x: xOf(D.set) - 6, y: y1 - 6, class: 'r-time', 'text-anchor': 'end', style: 'fill:var(--geru)' }, svg, `sunset ${fmt(D.set)}`);
+  el('text', { x: RX1 - 6, y: y1 - 6, class: 'r-time', 'text-anchor': 'end', style: 'fill:#E7D9B0' }, svg, `next sunrise ${fmt(D.next)}`);
+  // IST hour axis
+  const h0 = Math.ceil((D.rise + IST) / 3600e3) * 3600e3 - IST;
+  for (let h = h0; h < D.next; h += 3600e3) {
+    const x = xOf(h), hr = istParts(h).h;
+    el('line', { x1: x, y1: 18, x2: x, y2: hr % 3 ? 22 : 26, stroke: 'var(--ink-faint)', 'stroke-width': 1 }, svg);
+    if (hr % 3 === 0) el('text', { x, y: 13, class: 'r-axis', 'text-anchor': 'middle' }, svg, String(hr).padStart(2, '0') + ':00');
+  }
+  // rows labels
+  const lab = (row, dev, sub) => {
+    const [a, b] = ROWS[row];
+    el('text', { x: 8, y: (a + b) / 2 - (sub ? 2 : -5), class: 'r-lab' }, svg, dev);
+    if (sub) el('text', { x: 8, y: (a + b) / 2 + 11, class: 'r-sub' }, svg, sub);
+  };
+  lab('sky', 'आकाश', 'sky');
+  el('text', { x: 8, y: 91, class: 'r-sub' }, svg, 'muhūrta · 48 min');
+  el('text', { x: 8, y: 112, class: 'r-sub' }, svg, 'kāla · day eighths');
+  lab('tithi', 'तिथि', 'tithi'); lab('nakshatra', 'नक्षत्र', 'nakṣatra'); lab('yoga', 'योग', 'yoga');
+  lab('karana', 'करण', 'karaṇa');
+  el('text', { x: 8, y: 272, class: 'r-sub' }, svg, 'horā · planetary hour');
+  // muhūrtas
+  D.muh.forEach(([a, b, name, kind], i) => {
+    const [ya, yb] = ROWS.muh;
+    const fill = kind ? 'var(--haldi)' : i < 15 ? (i % 2 ? '#EBDDB3' : '#F3E8C8') : (i % 2 ? '#C9C3B2' : '#D6D0BE');
+    el('rect', { x: xOf(a) + .5, y: ya, width: Math.max(0, xOf(b) - xOf(a) - 1), height: yb - ya, fill, rx: 2, 'data-tip': `muh:${i}` }, svg);
+    if (kind) el('text', { x: (xOf(a) + xOf(b)) / 2, y: yb - 6, class: 'r-time', 'text-anchor': 'middle', style: 'fill:var(--ink);font-size:9.5px' }, svg, kind === 'abhijit' ? 'Abhijit' : 'Brahma');
+  });
+  // kāla
+  D.kala.forEach(([name, [a, b], col, dev], i) => {
+    const [ya, yb] = ROWS.kal;
+    el('rect', { x: xOf(a), y: ya, width: xOf(b) - xOf(a), height: yb - ya, fill: col, rx: 3, 'data-tip': `kal:${i}` }, svg);
+    el('text', { x: (xOf(a) + xOf(b)) / 2, y: yb - 4, class: 'r-txt l', 'text-anchor': 'middle', style: 'font-size:11px' }, svg, dev);
+  });
+  // limb bands
+  const band = (k, getName, colorFn) => {
+    const [ya, yb] = ROWS[k];
+    D.spans[k].forEach((sp, j) => {
+      const xa = xOf(sp.from), xb = xOf(sp.to), [fill, light] = colorFn(sp.i, j);
+      el('rect', { x: xa + .5, y: ya, width: Math.max(0, xb - xa - 1), height: yb - ya, fill, rx: 3, 'data-tip': `band:${k}:${j}` }, svg);
+      const name = getName(sp.i);
+      const wpx = xb - xa;
+      const txt = wpx > name[0].length * 9 + 50 ? name[0] + '  ' : '';
+      const show = wpx > 46;
+      if (show) {
+        const tx = el('text', { x: xa + 8, y: (ya + yb) / 2 + 5, class: 'r-txt' + (light ? ' l' : '') }, svg);
+        el('tspan', {}, tx, txt);
+        el('tspan', { style: 'font-family:var(--f-body);font-style:italic;font-size:12px' }, tx, wpx > name[1].length * 7 + (txt ? name[0].length * 9 + 60 : 20) ? name[1] : '');
+      }
+      if (j > 0) {
+        el('path', { d: `M${xa} ${ya - 3}l4 3-4 3-4-3z`, fill: 'var(--ink)' }, svg);
+      }
+    });
+  };
+  band('tithi', i => tithiName(i + 1), i => { const k = (1 - cos(12 * i + 6)) / 2; return [mix(DARK, LIGHT, k), k <= .45]; });
+  band('nakshatra', i => NAK[i], (i, j) => [j % 2 ? '#E6D2A0' : '#F1E3BC', false]);
+  band('yoga', i => YOGA[i], (i) => [YOGA[i][2] ? '#CFE0CF' : '#EBCFBF', false]);
+  band('karana', k => karana(k), (k) => KMOV[(k - 1) % 7] && !KFIX[k] && (k - 1) % 7 === 6 ? ['var(--sindoor)', true] : [k % 2 ? '#E5D5A6' : '#F0E4C0', false]);
+  // transition times, placed under each band edge
+  for (const k of ['tithi', 'nakshatra', 'yoga', 'karana']) {
+    const [ya, yb] = ROWS[k];
+    D.spans[k].slice(1).forEach(sp => {
+      const x = xOf(sp.from);
+      el('text', { x: x + 3, y: yb - 3, class: 'r-time', style: 'font-size:9px;opacity:.85' }, svg, fmt(sp.from));
+    });
+  }
+  // horā
+  D.hora.forEach(([a, b, lord], i) => {
+    const [ya, yb] = ROWS.hora;
+    el('rect', { x: xOf(a) + .5, y: ya, width: xOf(b) - xOf(a) - 1, height: yb - ya, fill: i < 12 ? '#F1E4BF' : '#D9D2BF', rx: 2, 'data-tip': `hora:${i}` }, svg);
+    el('text', { x: (xOf(a) + xOf(b)) / 2, y: yb - 5, class: 'r-txt', 'text-anchor': 'middle', style: 'font-size:12px' }, svg, lord[0]);
+  });
+  // ghaṭī axis
+  for (let g = 0; g <= 60; g++) {
+    const x = RX0 + g / 60 * (RX1 - RX0), big = g % 5 === 0;
+    el('line', { x1: x, y1: 286, x2: x, y2: big ? 294 : 290, stroke: 'var(--geru)', 'stroke-width': big ? 1.2 : .6 }, svg);
+    if (big) el('text', { x, y: 307, class: 'r-gh', 'text-anchor': 'middle' }, svg, dn(g));
+  }
+  el('text', { x: 8, y: 306, class: 'r-sub', style: 'fill:var(--geru)' }, svg, 'ghaṭī from sunrise');
+  // real "now" if it lies in this day
+  const now = Date.now();
+  if (now > D.rise && now < D.next) {
+    el('line', { x1: xOf(now), y1: 22, x2: xOf(now), y2: 282, stroke: 'var(--lapis)', 'stroke-width': 1, 'stroke-dasharray': '2 3' }, svg);
+    el('text', { x: xOf(now) + 3, y: 316, class: 'r-time', style: 'fill:var(--lapis)' }, svg, 'now');
+  }
+  // needle
+  RB.needle = el('g', { style: 'pointer-events:none' }, svg);
+  el('line', { x1: 0, y1: 20, x2: 0, y2: 284, stroke: 'var(--sindoor)', 'stroke-width': 2 }, RB.needle);
+  el('rect', { x: -56, y: 312, width: 112, height: 22, rx: 11, fill: 'var(--sindoor)' }, RB.needle);
+  RB.nT = el('text', { x: 0, y: 327, 'text-anchor': 'middle', class: 'r-time', style: 'fill:var(--leaf-lit);font-size:11.5px' }, RB.needle);
+  el('circle', { cx: 0, cy: 20, r: 5, fill: 'var(--sindoor)' }, RB.needle);
+  RB.sunDot = el('circle', { r: 7, fill: 'var(--haldi)', stroke: 'var(--geru)', 'stroke-width': 1.2 }, svg);
+  const p = istParts(D.rise);
+  $('#ribbonCap').textContent = `Ahorātra · ${WD[p.wd]} ${p.d} ${MON[p.m]}, sunrise to sunrise at ${CITIES[S.city][0]}`;
+}
+function renderNeedle(t) {
+  const D = DAY_, x = xOf(t);
+  RB.needle.setAttribute('transform', `translate(${Math.min(RX1 - 56, Math.max(RX0 + 0, x))} 0)`);
+  RB.needle.firstChild.setAttribute('x1', x - Math.min(RX1 - 56, Math.max(RX0, x)));
+  RB.needle.firstChild.setAttribute('x2', x - Math.min(RX1 - 56, Math.max(RX0, x)));
+  RB.needle.lastChild.setAttribute('cx', x - Math.min(RX1 - 56, Math.max(RX0, x)));
+  const [g, p] = ghati(t - D.rise);
+  RB.nT.textContent = S.live ? `${fmtS(t)} · ${g}gh ${p}p` : `${fmt(t)} · ${g}gh ${p}p`;
+  if (t < D.set) {
+    const u = (t - D.rise) / (D.set - D.rise), sx0 = RX0, sx1 = xOf(D.set), [y0, y1] = ROWS.sky;
+    const cy = y0 - 34, bx = (1 - u) ** 2 * sx0 + 2 * u * (1 - u) * (sx0 + sx1) / 2 + u * u * sx1;
+    const by = (1 - u) ** 2 * y1 + 2 * u * (1 - u) * cy + u * u * y1;
+    RB.sunDot.setAttribute('cx', bx); RB.sunDot.setAttribute('cy', by); RB.sunDot.style.display = '';
+  } else RB.sunDot.style.display = 'none';
+}
+
+/* ---------- viśeṣa notes ---------- */
+function renderNotes() {
+  const D = DAY_, out = [];
+  const tn = i => tithiName(i + 1)[1];
+  const today = WEAVE && WEAVE.days.find(x => x.y === D.y && x.m === D.m && x.d === D.d);
+  if (today) {
+    for (const [f, rule] of today.fest) out.push(['fest', `<b>${f}</b>, because its tithi holds ${RULE_WORD[rule]}.`]);
+    for (const [v, rule] of today.vrata) out.push(['fest', `${v}, because the tithi holds ${RULE_WORD[rule]}.`]);
+  }
+  out.push(['', `The day is named <b>${tn(D.tRise)}</b> because that tithi held at sunrise (${fmt(D.rise)}).` + (D.spans.tithi.length > 1 ? ` It gives way at ${fmt(D.spans.tithi[0].to)}, but the day keeps its name until the next sunrise.` : ' It lasts past the next sunrise.')]);
+  for (const k of D.ksaya) out.push(['warn', `<b>Kṣaya tithi:</b> ${tn(k.i)} runs from ${fmt(k.from)} to ${stamp(k.to, D.rise)} and never meets a sunrise, so no day carries its name.`]);
+  if (D.vrddhi) out.push(['warn', `<b>Vṛddhi tithi:</b> ${tn(D.tRise)} also held at yesterday's sunrise, so two days carry the same tithi.`]);
+  if (D.masa.adhika) out.push(['adhika', `<b>Adhika māsa:</b> the Sun enters no new sign between this month's two new moons, so this is an intercalary month. Most festivals wait for the regular (nija) ${MASA[D.masa.amanta][1]} that follows.`]);
+  if (D.sankranti) out.push(['adhika', `<b>Saṅkrānti</b> at ${stamp(D.sankranti.t, D.rise)}: the Sun enters <span class="deva">${RASI[D.sankranti.r][0]}</span> ${RASI[D.sankranti.r][1]}.`]);
+  const vis = D.spans.karana.filter(s => KFIX[s.i] == null && (s.i - 1) % 7 === 6);
+  for (const s of vis) out.push(['warn', `<b>Bhadrā</b> (Viṣṭi karaṇa) ${stamp(s.from, D.rise)} to ${stamp(s.to, D.rise)}: traditionally avoided for new beginnings.`]);
+  const ab = D.muh[7];
+  if (ab[3]) out.push(['', `<b>Abhijit muhūrta</b> ${fmt(ab[0])} to ${fmt(ab[1])}, the eighth of the fifteen day-muhūrtas, around local noon.`]);
+  $('#notes').innerHTML = out.map(([c, h]) => `<li class="${c}"><span>${h}</span></li>`).join('');
+}
+
+/* ---------- weave ---------- */
+function moonGlyph(n, size) {
+  const e = 12 * (n - 1) + 6, r = size / 2 - 1;
+  return `<svg width="${size}" height="${size}" viewBox="${-size / 2} ${-size / 2} ${size} ${size}" aria-hidden="true"><circle r="${r}" fill="#1f2a58"/><path d="${litPath(e, r)}" fill="#F6EDCF"/></svg>`;
+}
+function renderWeave() {
+  const M = WEAVE.masa;
+  $('#masaDev').textContent = (M.adhika ? 'अधिक ' : '') + MASA[M.amanta][0] + ' मास';
+  const pn = istParts(M.prevNM), nn = istParts(M.nextNM);
+  $('#masaCap').textContent = `${M.adhika ? 'Adhika ' : ''}${MASA[M.amanta][1]} māsa (amānta) · new moon ${pn.d} ${MON[pn.m]} ${fmt(M.prevNM)} to new moon ${nn.d} ${MON[nn.m]} ${fmt(M.nextNM)}`;
+  const row = (from, dev, ia) => `<div class="wrow"><div class="rl"><span class="deva">${dev}</span><span>${ia}</span></div>` +
+    WEAVE.cells.slice(from, from + 15).map(c => {
+      const kind = c.days.length === 0 ? 'ksaya' : c.days.length > 1 ? 'vrddhi' : '';
+      const tn = tithiName(c.n);
+      const fest = c.days.flatMap(D => D.fest.map(f => `<span class="fest">${f[0]}</span>`)).join('');
+      const vr = c.days.flatMap(D => D.vrata.filter(v => !/Pūrṇimā|Amāvasyā/.test(v[0])).map(v => `<span class="vr">${v[0]}</span>`)).join('');
+      return `<div class="cell ${kind}" data-tip="cell:${c.n}">
+        ${moonGlyph(c.n, 22)}
+        <span class="tn">${c.n === 15 ? 'पूर्णिमा' : c.n === 30 ? 'अमावस्या' : dn(c.n > 15 ? c.n - 15 : c.n)}</span>
+        <span class="tl">${tn[1]}</span>
+        <span class="dates">${c.days.map(D => `<button class="dt" data-ymd="${D.y},${D.m},${D.d}">${WD[istParts(D.rise).wd]} ${D.d} ${MON[D.m]}</button>`).join('')}</span>
+        ${kind ? `<span class="mark">${kind === 'ksaya' ? 'kṣaya' : 'vṛddhi'}</span>` : ''}
+        ${fest}${vr}
+      </div>`;
+    }).join('') + '</div>';
+  $('#weave').innerHTML = row(0, 'शुक्ल', 'Śukla · waxing') + row(15, 'कृष्ण', 'Kṛṣṇa · waning');
+  markWeave();
+}
+function markWeave() {
+  document.querySelectorAll('#weave .dt').forEach(b => b.classList.toggle('cur', b.dataset.ymd === `${DAY_.y},${DAY_.m},${DAY_.d}`));
+  const n = idx('tithi', S.t) + 1;
+  document.querySelectorAll('#weave .cell').forEach((c, i) => c.classList.toggle('here', i + 1 === n));
+}
+
+/* ---------- tooltip ---------- */
+const tip = $('#tip');
+function tipFor(key) {
+  const [k, a, b] = key.split(':');
+  const i = +a;
+  const D = DAY_;
+  if (k === 'nak') { const N = NAK[i]; return `<span class="deva">${N[0]}</span> ${N[1]}<br><em>${degFmt(i * NW)} – ${degFmt((i + 1) * NW)}</em><br>deity ${N[2]} · lord ${N[3]} · ${N[4]} gaṇa`; }
+  if (k === 'ras') return `<span class="deva">${RASI[i][0]}</span> ${RASI[i][1]}<br><em>${i * 30}° – ${i * 30 + 30}° sidereal</em><br>9 pādas, 2¼ nakṣatras`;
+  if (k === 'yoga') return `<span class="deva">${YOGA[i][0]}</span> ${YOGA[i][1]} · ${YOGA[i][2] ? 'auspicious' : 'inauspicious'}<br><em>reached when Sun + Moon = ${degFmt(i * NW)}</em>`;
+  if (k === 'tithi') { const n = i + 1, t = tithiName(n); return `<span class="deva">${t[0]}</span> ${t[1]} · ${pakshaOf(n)[1]}<br><em>Moon ${12 * i}°–${12 * i + 12}° ahead of the Sun</em><br>deity ${t[2]}`; }
+  if (k === 'kar') { const K = karana(i); return `<span class="deva">${K[0]}</span> ${K[1]} · ${K[2]}<br><em>${6 * i}°–${6 * i + 6}° of elongation</em>${K[1] === 'Viṣṭi' ? '<br>Bhadrā: avoided for beginnings' : ''}`; }
+  if (k === 'sun') return `<span class="deva">सूर्य</span> Sun · ${degFmt(sunSid(S.t))} sidereal<br><em>in ${RASI[Math.floor(sunSid(S.t) / 30)][1]}, moving about 1° a day</em>`;
+  if (k === 'moon') return `<span class="deva">चन्द्र</span> Moon · ${degFmt(moonSid(S.t))} sidereal<br><em>moving 12–15° a day, about 13 times faster than the Sun</em>`;
+  if (k === 'spica') return `<span class="deva">चित्रा</span> Citrā (Spica) fixed at 180°<br><em>Lahiri ayanāṁśa today ${degFmt(ayanamsa(S.t))}: the gap between this star-fixed zodiac and the tropical one</em>`;
+  if (k === 'zero') return `0° Aśvinī · start of Meṣa<br><em>the sidereal zodiac begins here</em>`;
+  if (k === 'muh') { const m = D.muh[i]; return `Muhūrta ${i + 1} · ${m[2]}<br><em>${fmt(m[0])} – ${fmt(m[1])}</em>${m[3] === 'abhijit' ? '<br>Abhijit: auspicious midday muhūrta' : m[3] === 'brahma' ? '<br>Brāhma muhūrta: the hour for study and meditation' : ''}`; }
+  if (k === 'kal') { const c = D.kala[i]; return `${c[0]}<br><em>${fmt(c[1][0])} – ${fmt(c[1][1])}</em><br>one eighth of daylight, fixed by weekday`; }
+  if (k === 'hora') { const h = D.hora[i]; return `Horā ${i + 1} · ${h[2][1]}<br><em>${fmt(h[0])} – ${fmt(h[1])}</em><br>${i < 12 ? 'a twelfth of daylight' : 'a twelfth of night'}`; }
+  if (k === 'band') {
+    const sp = D.spans[a][+b];
+    const nm = a === 'tithi' ? tithiName(sp.i + 1) : a === 'nakshatra' ? NAK[sp.i] : a === 'yoga' ? YOGA[sp.i] : karana(sp.i);
+    return `<span class="deva">${nm[0]}</span> ${nm[1]}<br><em>${stamp(sp.from, D.rise)} – ${stamp(sp.to, D.rise)}${+b === 0 ? ' (began earlier)' : ''}</em>`;
+  }
+  if (k === 'cell') { const c = WEAVE.cells[i - 1]; const t = tithiName(i); return `<span class="deva">${t[0]}</span> ${t[1]} · ${pakshaOf(i)[1]}<br><em>${c.days.length === 0 ? 'touches no sunrise: kṣaya' : c.days.length > 1 ? 'spans two sunrises: vṛddhi' : 'one sunrise, one day'}</em>`; }
+  return '';
+}
+function onTip(ev) {
+  const t = ev.target.closest && ev.target.closest('[data-tip]');
+  if (!t) { tip.classList.remove('show'); return; }
+  tip.innerHTML = tipFor(t.dataset.tip);
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = ev.clientX + 14, y = ev.clientY + 16;
+  if (x + w > innerWidth - 8) x = ev.clientX - w - 14;
+  if (y + h > innerHeight - 8) y = ev.clientY - h - 14;
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  tip.classList.add('show');
+}
+document.addEventListener('pointermove', onTip);
+document.addEventListener('pointerleave', () => tip.classList.remove('show'));
+
+/* ---------- time control ---------- */
+function setDay(y, m, d, t) {
+  DAY_ = computeDay(y, m, d);
+  S.ymd = [y, m, d];
+  S.t = Math.min(DAY_.next - 1000, Math.max(DAY_.rise, t));
+  if (!WEAVE || WEAVE.masa.prevNM !== DAY_.masa.prevNM || WEAVE.city !== S.city) { WEAVE = computeWeave(DAY_.masa); WEAVE.city = S.city; renderWeave(); }
+  buildRibbon(); renderNotes(); renderTime();
+}
+function renderTime() {
+  renderWheel(S.t); renderNeedle(S.t); renderLimbs(S.t); renderFacts(S.t); markWeave();
+}
+function dayOf(t) {
+  const p = istParts(t);
+  const r = sunEvents(p.y, p.m, p.d, CITIES[S.city][1], CITIES[S.city][2]).rise;
+  return t < r ? addDays(p.y, p.m, p.d, -1) : [p.y, p.m, p.d];
+}
+let tween = null;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function travel(ymd, t) {
+  if (tween) cancelAnimationFrame(tween);
+  const from = S.t, dur = reduceMotion ? 0 : Math.min(1400, 450 + Math.abs(t - from) / 864e5 * 60);
+  const t0 = performance.now();
+  const step = now => {
+    const u = dur ? Math.min(1, (now - t0) / dur) : 1, k = u < .5 ? 2 * u * u : 1 - (-2 * u + 2) ** 2 / 2;
+    renderWheel(from + (t - from) * k);
+    if (u < 1) tween = requestAnimationFrame(step); else { tween = null; setDay(...ymd, t); }
+  };
+  tween = requestAnimationFrame(step);
+}
+function setLive(on) { S.live = on; $('#today').classList.toggle('live', on); $('#today').textContent = on ? 'Live' : 'Now'; }
+function shiftDay(k) {
+  const ymd = addDays(...S.ymd, k);
+  const D = dayData(...ymd);
+  travel(ymd, D.rise + (S.t - DAY_.rise) / (DAY_.next - DAY_.rise) * (D.next - D.rise));
+}
+$('#prev').onclick = () => { stopPlay(); setLive(false); shiftDay(-1); };
+$('#next').onclick = () => { stopPlay(); setLive(false); shiftDay(1); };
+$('#today').onclick = () => { stopPlay(); setLive(true); const now = Date.now(); travel(dayOf(now), now); };
+$('#weave').addEventListener('click', e => {
+  const b = e.target.closest('.dt'); if (!b) return;
+  stopPlay(); setLive(false);
+  const ymd = b.dataset.ymd.split(',').map(Number), D = dayData(...ymd);
+  travel(ymd, D.rise + (S.t - DAY_.rise) / (DAY_.next - DAY_.rise) * (D.next - D.rise));
+});
+const sel = $('#citySel');
+sel.innerHTML = CITIES.map((c, i) => `<option value="${i}">${c[0]}</option>`).join('');
+sel.onchange = () => { S.city = +sel.value; WEAVE = null; winCache.clear(); setDay(...S.ymd, S.t); };
+
+// scrub the ribbon
+const rib = $('#ribbon');
+let drag = false;
+function scrubTo(ev) {
+  const p = rib.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY;
+  const x = p.matrixTransform(rib.getScreenCTM().inverse()).x;
+  S.t = Math.min(DAY_.next - 1000, msOf(x)); renderTime();
+}
+rib.addEventListener('pointerdown', ev => { stopPlay(); setLive(false); drag = true; rib.setPointerCapture(ev.pointerId); scrubTo(ev); });
+rib.addEventListener('pointermove', ev => { if (drag) scrubTo(ev); });
+rib.addEventListener('pointerup', () => { drag = false; });
+rib.addEventListener('pointercancel', () => { drag = false; });
+rib.addEventListener('keydown', ev => {
+  const k = { ArrowRight: 1, ArrowLeft: -1 }[ev.key]; if (!k) return;
+  ev.preventDefault(); setLive(false); S.t = Math.min(DAY_.next - 1000, Math.max(DAY_.rise, S.t + k * (ev.shiftKey ? 3600e3 : 600e3))); renderTime();
+});
+rib.setAttribute('tabindex', '0');
+
+// let time run: one day every ten seconds
+let playRaf = null, lastFrame = 0;
+function stopPlay() { if (playRaf) cancelAnimationFrame(playRaf); playRaf = null; $('#play').setAttribute('aria-pressed', 'false'); $('#play').textContent = '▶ Run time'; }
+$('#play').onclick = () => {
+  if (playRaf) return stopPlay();
+  setLive(false);
+  $('#play').setAttribute('aria-pressed', 'true'); $('#play').textContent = '❚❚ Pause';
+  lastFrame = performance.now();
+  const step = now => {
+    const dt = Math.min(100, now - lastFrame); lastFrame = now;
+    const t = S.t + dt * 8640;
+    if (t >= DAY_.next - 1000) setDay(...addDays(...S.ymd, 1), DAY_.next + 1);
+    else { S.t = t; renderTime(); }
+    playRaf = requestAnimationFrame(step);
+  };
+  playRaf = requestAnimationFrame(step);
+};
+
+/* ---------- start ---------- */
+buildWheel(); buildLimbs();
+setDay(...dayOf(Date.now()), Date.now());
+setLive(true);
+setInterval(() => {
+  if (!S.live || playRaf || tween || drag) return;
+  const now = Date.now();
+  if (now >= DAY_.next) setDay(...dayOf(now), now);
+  else { S.t = now; renderTime(); }
+}, 400);
+
+</script>
+
+</body>
+</html>
